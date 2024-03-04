@@ -18,10 +18,25 @@ export var game = function(){
         }
     };
 
+    const default_options = {
+        pairs:2,
+        difficulty:'normal'
+    };
+    var options = JSON.parse(localStorage.options||JSON.stringify(default_options));
     var lastCard;
-    var pairs = 2;
+    var pairs = options.pairs;
+    var difficulty = options.difficulty;
     var points = 100;
-
+    var temps = 1000;
+    if (options.difficulty == 'hard'){
+        temps = 500;
+    }
+    else if (options.difficulty == 'normal'){
+        temps = 1000;
+    }
+    else {
+        temps = 5000;
+    };
     return {
         init: function (call){
             var items = resources.slice(); // Copiem l'array
@@ -29,7 +44,21 @@ export var game = function(){
             items = items.slice(0, pairs); // Agafem els primers
             items = items.concat(items);
             items.sort(() => Math.random() - 0.5); // Aleatòria
-            return items.map(item => Object.create(card, {front: {value:item}, callback: {value:call}}));
+
+            var c = items.map(item => Object.create(card, {front: {value:item}, callback: {value:call}}));
+            c.forEach( obj =>{
+                obj.current = obj.front;
+                obj.clickable = 
+                setTimeout(() => {
+                    obj.current = back;
+                    obj.clickable = true;
+                    obj.callback()
+                }, temps);
+            });
+            
+            return c;
+
+
         },
         click: function (card){
             if (!card.clickable) return;
