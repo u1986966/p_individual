@@ -3,8 +3,8 @@ body {
     background-color: #f2f2f2;
     margin: 0;
     padding: 0;
-    display: grid; /* Cambiamos a un diseño de cuadrícula */
-    place-items: center; /* Centramos los elementos en la cuadrícula */
+    display: grid;
+    place-items: center;
 
 }
 
@@ -22,7 +22,7 @@ h1 {
 label {
     display: block;
     margin-top: 1rem;
-    text-align: center; /* Centramos el texto del label */
+    text-align: center;
 }
 
 input[type="number"], select {
