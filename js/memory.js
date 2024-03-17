@@ -4,16 +4,19 @@ export var game = function(){
     const card = {
         current: back,
         clickable: true,
+        visible: false, // per no ser clicada quan es veu
         goBack: function (){
             setTimeout(() => {
                 this.current = back;
                 this.clickable = true;
+                this.visible = false;
                 this.callback();
             }, 1000);
         },
         goFront: function (){
             this.current = this.front;
             this.clickable = false;
+            this.visible = true;
             this.callback();
         }
     };
@@ -48,7 +51,8 @@ export var game = function(){
             var c = items.map(item => Object.create(card, {front: {value:item}, callback: {value:call}}));
             c.forEach( obj =>{
                 obj.current = obj.front;
-                obj.clickable = 
+                obj.clickable = false; //inicialment les cartes no es poden clicar
+                obj.visible = false; // tampoc son visibles
                 setTimeout(() => {
                     obj.current = back;
                     obj.clickable = true;
@@ -61,7 +65,7 @@ export var game = function(){
 
         },
         click: function (card){
-            if (!card.clickable) return;
+            if (!card.clickable || card.visible) return;
             card.goFront();
             if (lastCard){ // Segona carta
                 if (card.front === lastCard.front){
